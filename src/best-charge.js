@@ -2,16 +2,7 @@ function get_items_info(selectedItems) {
   let bought_item_ids = selectedItems.map(item => item.split(' x ')[0]);
   let bought_item_counts = selectedItems.map(item => parseInt(item.split(' x ')[1]));
 
-  function item_is_bought(item) {
-    for (let id of bought_item_ids) {
-      if (item['id'] === id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  let bought_items_info = loadAllItems().filter(item => item_is_bought(item));
+  let bought_items_info = loadAllItems().filter(item => bought_item_ids.filter(x => x === item['id']).length !== 0);
   return bought_items_info.map((item, index) => {
     let new_item = {};
     new_item['id'] = item['id'];
@@ -43,18 +34,9 @@ function get_cost_for_30_reduce_6(bought_items_info) {
 }
 
 function get_cost_for_half(bought_items_info) {
-  function is_discount_item(id) {
-    let discount_items = loadPromotions()[1]['items'];
+  let discount_items = loadPromotions()[1]['items'];
 
-    for (let i = 0; i < discount_items.length; i++) {
-      if (discount_items[i] === id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  let discount_items_info = bought_items_info.filter(item => is_discount_item(item['id']));
+  let discount_items_info = bought_items_info.filter(item => discount_items.filter(x => x === item['id']).length !== 0);
   let origin_total_prices = bought_items_info.map(item => item['total']).reduce((total, current) => {
     return total + current;
   });
