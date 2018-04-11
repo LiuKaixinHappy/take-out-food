@@ -39,6 +39,19 @@ describe('Take out food', function () {
     expect(discount).toEqual(expected)
   });
 
+  it('should get discount info after 指定菜品半价', function() {
+    let inputs = ["ITEM0001 x 1", "ITEM0013 x 3", "ITEM0022 x 1"];
+    let item_info = get_items_info(inputs);
+    let discount = get_cost_for_half(item_info);
+    let expected = {
+      cannot_use: false,
+      discount_info: '指定菜品半价(黄焖鸡，凉皮)',
+      origin: 44.00,
+      reduce: 13.00,
+      total: 31.00
+    };
+    expect(discount).toEqual(expected)
+  });
   it('should generate best charge when best is 指定菜品半价', function() {
     let inputs = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
     let summary = bestCharge(inputs).trim();

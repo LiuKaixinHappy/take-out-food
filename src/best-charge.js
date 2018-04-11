@@ -43,7 +43,38 @@ function get_cost_for_30_reduce_6(bought_items_info) {
 }
 
 function get_cost_for_half(bought_items_info) {
-  return undefined;
+  function is_discount_item(id) {
+    let discount_items = loadPromotions()[1]['items'];
+
+    for (let i = 0; i < discount_items.length; i++) {
+      if (discount_items[i] === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  let discount_items_info = bought_items_info.filter(item => is_discount_item(item['id']));
+  let origin_total_prices = bought_items_info.map(item => item['total']).reduce((total, current) => {
+    return total + current;
+  });
+  if (discount_items_info.length === 0) {
+    return {
+      'cannot_use': true, 'discount_info': '指定菜品半价', 'origin': origin_total_prices, 'reduce': 0,
+      'total': origin_total_prices
+    };
+  } else {
+    let reduce = discount_items_info.map(item => item['total']).reduce((total, current) =>{
+      return total + current;
+    }) / 2;
+    let total = origin_total_prices - reduce;
+    let discount_item_name = discount_items_info.map(item => item['name']);
+    let discount_info = '指定菜品半价(' + discount_item_name.join('，') + ')';
+    return {
+      'cannot_use': false, 'discount_info': discount_info, 'origin': origin_total_prices, 'reduce': reduce,
+      'total': total
+    };
+  }
 }
 
 function normal_ticket() {
