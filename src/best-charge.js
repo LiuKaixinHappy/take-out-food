@@ -77,13 +77,42 @@ function get_cost_for_half(bought_items_info) {
   }
 }
 
-function normal_ticket() {
-
+function normal_ticket(bought_items_info) {
+  let bought_info = [];
+  for (let i = 0; i < bought_items_info.length; i++) {
+    bought_info.push(bought_items_info[i]['name'] + ' x '
+      + bought_items_info[i]['count'] + ' = '
+      + bought_items_info[i]['total'] + '元\n');
+  }
+  return '============= 订餐明细 =============\n'
+    + bought_info.join('')
+    + '-----------------------------------\n'
+    + '总计：'
+    + bought_items_info.map(item => item['total']).reduce((total, current) => {return total + current})
+    + '元\n'
+    + '===================================';
 }
 
-function discount_ticket(result_for_30_reduce_6) {
-
-
+function discount_ticket(bought_items_info, discount) {
+  let bought_info = [];
+  for (let i = 0; i < bought_items_info.length; i++) {
+    bought_info.push(bought_items_info[i]['name'] + ' x '
+      + bought_items_info[i]['count'] + ' = '
+      + bought_items_info[i]['total'] + '元\n');
+  }
+  return '============= 订餐明细 =============\n'
+    + bought_info.join('')
+    + '-----------------------------------\n'
+    + '使用优惠:\n'
+    + discount['discount_info']
+    + '，省'
+    + discount['reduce']
+    + '元\n'
+    + '-----------------------------------\n'
+    + '总计：'
+    + discount['total']
+    + '元\n'
+    + '===================================';
 }
 
 function bestCharge(selectedItems) {
@@ -94,10 +123,10 @@ function bestCharge(selectedItems) {
   let result_for_half = get_cost_for_half(bought_items_info);
 
   if (result_for_30_reduce_6['cannot_use'] && result_for_half['cannot_use']) {
-    return normal_ticket();
+    return normal_ticket(bought_items_info);
   } else if (result_for_30_reduce_6['reduce'] >= result_for_half['reduce']) {
-    return discount_ticket(result_for_30_reduce_6);
+    return discount_ticket(bought_items_info, result_for_30_reduce_6);
   } else {
-    return discount_ticket(result_for_half);
+    return discount_ticket(bought_items_info, result_for_half);
   }
 }
