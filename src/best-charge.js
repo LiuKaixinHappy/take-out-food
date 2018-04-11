@@ -1,4 +1,3 @@
-
 function get_items_info(selectedItems) {
   let bought_item_ids = selectedItems.map(item => item.split(' x ')[0]);
   let bought_item_counts = selectedItems.map(item => parseInt(item.split(' x ')[1]));
@@ -19,12 +18,28 @@ function get_items_info(selectedItems) {
     new_item['name'] = item['name'];
     new_item['price'] = item['price'];
     new_item['count'] = bought_item_counts[index];
+    new_item['total'] = new_item['price'] * new_item['count'];
     return new_item;
   });
 }
 
 function get_cost_for_30_reduce_6(bought_items_info) {
-  return undefined;
+  let origin_total_prices = bought_items_info.map(item => item['total']).reduce((total, current) => {
+    return total + current;
+  });
+  if (origin_total_prices < 30) {
+    return {
+      'cannot_use': true, 'discount_info': '满30减6元', 'origin': origin_total_prices, 'reduce': 0,
+      'total': origin_total_prices
+    };
+  } else {
+    let reduce = Math.floor(origin_total_prices / 30) * 6;
+    let total = origin_total_prices - reduce;
+    return {
+      'cannot_use': false, 'discount_info': '满30减6元', 'origin': origin_total_prices, 'reduce': reduce,
+      'total': total
+    };
+  }
 }
 
 function get_cost_for_half(bought_items_info) {
