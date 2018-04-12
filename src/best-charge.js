@@ -1,6 +1,6 @@
-function get_items_info(selectedItems) {
-  let bought_item_ids = selectedItems.map(item => item.split(' x ')[0]);
-  let bought_item_counts = selectedItems.map(item => parseInt(item.split(' x ')[1]));
+function get_items_info(selected_items) {
+  let bought_item_ids = selected_items.map(item => item.split(' x ')[0]);
+  let bought_item_counts = selected_items.map(item => parseInt(item.split(' x ')[1]));
 
   let bought_items_info = loadAllItems()
     .filter(item => bought_item_ids.filter(x => x === item['id']).length !== 0);
@@ -104,8 +104,8 @@ function ticket(bought_items_info, discount) {
   return header + discount_info + total;
 }
 
-function bestCharge(selectedItems) {
-  let bought_items_info = get_items_info(selectedItems);
+function bestCharge(selected_items) {
+  let bought_items_info = get_items_info(selected_items);
 
   let result_for_30_reduce_6 = get_cost_for_30_reduce_6(bought_items_info);
   let result_for_half = get_cost_for_half(bought_items_info);
