@@ -30,7 +30,6 @@ describe('Take out food', function () {
     let item_info = get_items_info(inputs);
     let discount = get_cost_for_30_reduce_6(item_info);
     let expected = {
-      cannot_use: false,
       discount_info: '满30减6元',
       origin: 44.00,
       reduce: 6.00,
@@ -44,7 +43,6 @@ describe('Take out food', function () {
     let item_info = get_items_info(inputs);
     let discount = get_cost_for_half(item_info);
     let expected = {
-      cannot_use: false,
       discount_info: '指定菜品半价(黄焖鸡，凉皮)',
       origin: 44.00,
       reduce: 13.00,
